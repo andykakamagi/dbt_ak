@@ -1,0 +1,25 @@
+   name: pipeline-ci
+
+   on:
+     push:
+       branches: [main]
+     pull_request:
+     schedule:
+       - cron: "0 1 * * *"
+     workflow_dispatch:
+
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v4
+         - uses: actions/setup-python@v5
+           with:
+             python-version: "3.11"
+         - name: Install dependencies
+           run: pip install -r requirements.txt
+         - name: Ingest raw data (one month to keep CI fast)
+           run: python ingestion/load_raw.py --months 2024-01
+         - name: dbt build (models + tests)
+           working-directory: dbt_project
+           run: dbt build --profiles-dir .
