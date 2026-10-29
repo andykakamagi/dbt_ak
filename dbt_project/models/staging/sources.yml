@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: yellow_trips
+        description: NYC TLC yellow taxi trip records, loaded as-is from parquet.
+      - name: taxi_zones
+        description: TLC taxi zone lookup (zone id, borough, zone name).

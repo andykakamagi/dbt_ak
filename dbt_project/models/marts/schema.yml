@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: dim_zone
+    description: Taxi zone dimension.
+    columns:
+      - name: zone_id
+        tests: [unique, not_null]
+  - name: fct_trips
+    description: Trip-level fact table (one row per valid trip).
+    columns:
+      - name: trip_id
+        tests: [unique, not_null]
+      - name: pickup_zone_id
+        tests:
+          - relationships:
+              to: ref('dim_zone')
+              field: zone_id
+              config:
+                severity: warn
+      - name: dropoff_zone_id
+        tests:
+          - relationships:
+              to: ref('dim_zone')
+              field: zone_id
+              config:
+                severity: warn
+      - name: payment_type_name
+        tests:
+          - accepted_values:
+              values: [credit_card, cash, no_charge, dispute, voided, unknown]
+  - name: mart_daily_borough_revenue
+    description: Daily KPIs per pickup borough.
+    columns:
+      - name: pickup_date
+        tests: [not_null]
+      - name: trips
+        tests: [not_null]

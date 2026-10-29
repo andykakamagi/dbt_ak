@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: stg_trips
+    description: Typed and cleaned trips. Invalid rows (negative amounts/distance, dropoff before pickup) are removed.
+    columns:
+      - name: trip_id
+        tests: [unique, not_null]
+      - name: pickup_ts
+        tests: [not_null]
+      - name: total_amount
+        tests: [not_null]
+  - name: stg_zones
+    columns:
+      - name: location_id
+        tests: [unique, not_null]
